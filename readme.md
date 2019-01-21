@@ -47,6 +47,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-- Lambda function inspired by Grig Gheorghiu's [Modifying EC2 security groups via AWS Lambda functions](https://medium.com/@griggheo/modifying-ec2-security-groups-via-aws-lambda-functions-115a1828cdb6) post in [Medium](https://medium.com) and modified slightly
+- Lambda function inspired by Grig Gheorghiu's [Modifying EC2 security groups via AWS Lambda functions](https://medium.com/@griggheo/modifying-ec2-security-groups-via-aws-lambda-functions-115a1828cdb6) post in [Medium](https://medium.com) and modified slightly.
 
 Made with ❤️ by Oddbytes.
