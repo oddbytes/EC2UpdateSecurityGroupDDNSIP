@@ -22,19 +22,23 @@ def lambda_handler(event, context):
 
     
 def update_security_group(new_ip_address):
+    new_cidr_ip="%s/32" % new_ip_address
     client = boto3.client('ec2')
     response = client.describe_security_groups(GroupIds=[SECURITY_GROUP_ID])
     group = response['SecurityGroups'][0]
     for permission in group['IpPermissions']:
         new_permission = copy.deepcopy(permission)
         ip_ranges = new_permission['IpRanges']
-        
+        permissions_changed=False
         for ip_range in ip_ranges:
-            if 'Description'  in ip_range:
-                print(ip_range)
+            if 'Description' in ip_range:
                 if ip_range['Description'] == SECURITY_RULE_DESCR:
-                    ip_range['CidrIp'] = "%s/32" % new_ip_address
-        client.revoke_security_group_ingress(GroupId=group['GroupId'], IpPermissions=[permission])
-        client.authorize_security_group_ingress(GroupId=group['GroupId'], IpPermissions=[new_permission])
+                    if ip_range['CidrIp'] != new_cidr_ip:
+                        ip_range['CidrIp'] = new_cidr_ip
+                        permissions_changed = True
+                        print(ip_range)
+        if (permissions_changed == True):
+            client.revoke_security_group_ingress(GroupId=group['GroupId'], IpPermissions=[permission])
+            client.authorize_security_group_ingress(GroupId=group['GroupId'], IpPermissions=[new_permission])
         
-    return ""
+    return new_cidr_ip if permissions_changed == True else  "No changes" 
